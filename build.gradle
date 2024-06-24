@@ -1,0 +1,17 @@
+// Tập tin build ở mức cao nhất, nơi bạn có thể thêm các tùy chọn cấu hình chung cho tất cả các module/dự án con.
+
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath("com.android.tools.build:gradle:7.0.3")
+        classpath("com.google.gms:google-services:4.4.2") // Thêm dòng này
+    }
+}
+
+plugins {
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.google.gms.google.services) apply false
+}
