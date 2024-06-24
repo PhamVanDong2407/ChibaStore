@@ -15,9 +15,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.a175.R;
 
 public class ProfileActivity extends AppCompatActivity {
-    TextView profileNameTxt;
+    TextView profileNameTxt, settingTxt;
     ImageView cart, main;
     Button logoutBtn;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +27,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         profileNameTxt = findViewById(R.id.profileNameTxt);
         logoutBtn = findViewById(R.id.logoutBtn);
+        settingTxt = findViewById(R.id.settingTxt);
 
         // Lấy tên người dùng từ SharedPreferences
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
@@ -73,6 +75,14 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        settingTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProfileActivity.this, SettingProfileActivity.class);
                 startActivity(intent);
             }
         });

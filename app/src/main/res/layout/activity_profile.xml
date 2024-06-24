@@ -55,7 +55,7 @@
         app:layout_constraintTop_toTopOf="@+id/imageView7" />
 
     <ImageView
-        android:id="@+id/imageView10"
+        android:id="@+id/settingImg"
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_marginTop="32dp"
@@ -71,18 +71,18 @@
         android:layout_marginStart="16dp"
         android:text="Chỉnh sửa thông tin cá nhân"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView10"
-        app:layout_constraintStart_toEndOf="@+id/imageView10"
-        app:layout_constraintTop_toTopOf="@+id/imageView10" />
+        app:layout_constraintBottom_toBottomOf="@+id/settingImg"
+        app:layout_constraintStart_toEndOf="@+id/settingImg"
+        app:layout_constraintTop_toTopOf="@+id/settingImg" />
 
     <ImageView
         android:id="@+id/imageView11"
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="@+id/imageView10"
-        app:layout_constraintStart_toStartOf="@+id/imageView10"
-        app:layout_constraintTop_toBottomOf="@+id/imageView10"
+        app:layout_constraintEnd_toEndOf="@+id/settingImg"
+        app:layout_constraintStart_toStartOf="@+id/settingImg"
+        app:layout_constraintTop_toBottomOf="@+id/settingImg"
         app:srcCompat="@drawable/help_icon" />
 
     <TextView
