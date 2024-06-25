@@ -1,8 +1,12 @@
 package com.example.a175.Activity;
 
+import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -13,6 +17,7 @@ import com.example.a175.Domain.ItemsDomain;
 import com.example.a175.Helper.ChangeNumberItemsListener;
 import com.example.a175.Helper.ManagmentCart;
 import com.example.a175.Helper.Order;
+import com.example.a175.R;
 import com.example.a175.databinding.ActivityCartBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -93,31 +98,67 @@ public class CartActivity extends BaseActivity {
         binding.checkOutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Lấy danh sách các mặt hàng trong giỏ hàng
-                ArrayList<ItemsDomain> cartItems = managmentCart.getListCart();
-
-                // Tạo đơn hàng mới
-                Order order = new Order();
-                order.setItems(cartItems);
-                order.setTotalPrice(Double.parseDouble(binding.totalTxt.getText().toString().replace("$", "")));
-                order.setTax(Double.parseDouble(binding.taxTxt.getText().toString().replace("$", "")));
-                order.setDeliveryFee(10.0); // Bạn có thể thay đổi phí giao hàng theo logic của bạn
-
-                // Lưu đơn hàng vào Firebase dưới tên người dùng
-                databaseReference.push().setValue(order).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(CartActivity.this, "Đã lưu đơn hàng thành công", Toast.LENGTH_SHORT).show();
-                            // Xóa giỏ hàng sau khi thanh toán thành công
-                            managmentCart.clearCart();
-                            finish();
-                        } else {
-                            Toast.makeText(CartActivity.this, "Lỗi khi lưu đơn hàng", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+                // Hiển thị dialog để nhập thông tin địa chỉ
+                showAddressDialog();
             }
         });
     }
+
+    private void showAddressDialog() {
+        // Tạo Dialog
+        Dialog dialog = new Dialog(CartActivity.this);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_address, null);
+        dialog.setContentView(dialogView);
+
+        EditText nameEditText = dialogView.findViewById(R.id.nameEditText);
+        EditText phoneEditText = dialogView.findViewById(R.id.phoneEditText);
+        EditText addressEditText = dialogView.findViewById(R.id.addressEditText);
+        Button confirmButton = dialogView.findViewById(R.id.confirmButton);
+
+        confirmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String name = nameEditText.getText().toString().trim();
+                String phone = phoneEditText.getText().toString().trim();
+                String address = addressEditText.getText().toString().trim();
+
+                if (name.isEmpty() || phone.isEmpty() || address.isEmpty()) {
+                    Toast.makeText(CartActivity.this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+                } else {
+                    // Lấy danh sách các mặt hàng trong giỏ hàng
+                    ArrayList<ItemsDomain> cartItems = managmentCart.getListCart();
+
+                    // Tạo đơn hàng mới
+                    Order order = new Order();
+                    order.setItems(cartItems);
+                    order.setTotalPrice(Double.parseDouble(binding.totalTxt.getText().toString().replace("$", "")));
+                    order.setTax(Double.parseDouble(binding.taxTxt.getText().toString().replace("$", "")));
+                    order.setDeliveryFee(10.0);
+                    order.setName(name);
+                    order.setPhone(phone);
+                    order.setAddress(address);
+
+                    // Lưu đơn hàng vào Firebase dưới tên người dùng
+                    databaseReference.push().setValue(order).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(CartActivity.this, "Đã lưu đơn hàng thành công", Toast.LENGTH_SHORT).show();
+                                // Xóa giỏ hàng sau khi thanh toán thành công
+                                managmentCart.clearCart();
+                                dialog.dismiss();
+                                finish();
+                            } else {
+                                Toast.makeText(CartActivity.this, "Lỗi khi lưu đơn hàng", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
+        dialog.show();
+    }
+
 }
