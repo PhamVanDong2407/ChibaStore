@@ -13,6 +13,7 @@ public class Order {
     private String name;
     private String phone;
     private String address;
+    private String paymentMethod;
 
     public String getName() {
         return name;
@@ -77,5 +78,13 @@ public class Order {
 
     public void setDeliveryFee(double deliveryFee) {
         this.deliveryFee = deliveryFee;
+    }
+
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
     }
 }
