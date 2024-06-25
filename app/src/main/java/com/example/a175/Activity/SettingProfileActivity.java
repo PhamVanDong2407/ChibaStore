@@ -71,7 +71,7 @@ public class SettingProfileActivity extends AppCompatActivity {
                 String name = AccountSetNameTxt.getText().toString();
                 String newUsername = AccountSetUsernameTxt.getText().toString();
                 String email = AccountSetEmailTxt.getText().toString();
-                String password = AccountSetPasswordTxt.getText().toString();
+                String newPassword = AccountSetPasswordTxt.getText().toString();
 
                 if (name.isEmpty()) {
                     AccountSetNameTxt.setError("Tên người dùng không được để trống!");
@@ -93,24 +93,25 @@ public class SettingProfileActivity extends AppCompatActivity {
                     AccountSetEmailTxt.requestFocus();
                     return;
                 }
-                if (password.isEmpty()) {
+                if (newPassword.isEmpty()) {
                     AccountSetPasswordTxt.setError("Mật khẩu không được để trống!");
                     AccountSetPasswordTxt.requestFocus();
                     return;
                 }
-                if (password.length() < 6) {
+                if (newPassword.length() < 6) {
                     AccountSetPasswordTxt.setError("Mật khẩu phải có ít nhất 6 ký tự!");
                     AccountSetPasswordTxt.requestFocus();
                     return;
                 }
 
                 // Cập nhật thông tin người dùng lên Firebase
-                User user = new User(name, newUsername, email, password);
+                User user = new User(name, newUsername, email, newPassword);
                 reference.setValue(user).addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         // Cập nhật lại SharedPreferences
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putString("username", newUsername);
+                        editor.putString("password", newPassword); // Thêm dòng này để lưu mật khẩu mới
                         editor.apply();
 
                         Toast.makeText(SettingProfileActivity.this, "Cập nhật thành công!", Toast.LENGTH_SHORT).show();
@@ -124,5 +125,6 @@ public class SettingProfileActivity extends AppCompatActivity {
                 });
             }
         });
+
     }
 }

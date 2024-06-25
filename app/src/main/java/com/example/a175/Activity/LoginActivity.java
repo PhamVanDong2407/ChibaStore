@@ -106,24 +106,27 @@ public class LoginActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     loginUsernameTxt.setError(null);
-                    String passwordDB = snapshot.child(userUsername).child("password").getValue(String.class);
+                    for (DataSnapshot userSnapshot : snapshot.getChildren()) {
+                        String passwordDB = userSnapshot.child("password").getValue(String.class);
 
-                    if (Objects.equals(passwordDB, userPassword)) {
-                        loginPasswordTxt.setError(null);
-                        Toast.makeText(LoginActivity.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
+                        if (Objects.equals(passwordDB, userPassword)) {
+                            loginPasswordTxt.setError(null);
+                            Toast.makeText(LoginActivity.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
 
-                        // Lưu tên người dùng vào SharedPreferences
-                        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString("username", userUsername);
-                        editor.apply();
+                            // Lưu tên người dùng và mật khẩu vào SharedPreferences
+                            SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putString("username", userUsername);
+                            editor.putString("password", userPassword); // Lưu mật khẩu vào SharedPreferences
+                            editor.apply();
 
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                        startActivity(intent);
-                        finish();
-                    } else {
-                        loginPasswordTxt.setError("Mật khẩu không đúng!");
-                        loginPasswordTxt.requestFocus();
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            loginPasswordTxt.setError("Mật khẩu không đúng!");
+                            loginPasswordTxt.requestFocus();
+                        }
                     }
                 } else {
                     loginUsernameTxt.setError("Người dùng không tồn tại!");
@@ -138,4 +141,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
 }
+
