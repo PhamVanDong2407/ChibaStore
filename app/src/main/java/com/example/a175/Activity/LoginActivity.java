@@ -129,7 +129,7 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 } else {
-                    loginUsernameTxt.setError("Người dùng không tồn tại!");
+                    loginUsernameTxt.setError("Tên người dùng không tồn tại!");
                     loginUsernameTxt.requestFocus();
                 }
             }
